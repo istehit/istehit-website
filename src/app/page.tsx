@@ -7,6 +7,14 @@ import EventsSection from '@/components/sections/EventsSection';
 import MembershipSection from '@/components/sections/MembershipSection';
 import { siteConfig } from '@/lib/site';
 
+function formatHeroDate(dateValue: string) {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+  }).format(new Date(dateValue));
+}
+
 export const metadata: Metadata = {
   title: 'ISTE HIT SC | Technical Society at Haldia Institute of Technology',
   description:
@@ -64,7 +72,7 @@ export default async function Home() {
                   <p style={{ "fontSize": "1.125rem", "fontWeight": "500", "marginBottom": "2.5rem", "maxWidth": "28rem" }}>
                       {upcomingEvent.description || "Join us for our next flagship event. Fostering technical growth through practical learning."}
                       <br/><br/>
-                      <strong style={{ opacity: 0.8 }}><span className="material-symbols-outlined" style={{ fontSize: '1rem', verticalAlign: 'text-bottom' }}>event</span> {new Date(upcomingEvent.eventDate).toLocaleDateString()} | {upcomingEvent.location}</strong>
+                      <strong style={{ opacity: 0.8 }}><span className="material-symbols-outlined" style={{ fontSize: '1rem', verticalAlign: 'text-bottom' }}>event</span> {formatHeroDate(upcomingEvent.eventDate)} | {upcomingEvent.location}</strong>
                   </p>
                   <div style={{ "display": "flex", "flexWrap": "wrap", "gap": "1rem" }}>
                       {upcomingEvent.registration && upcomingEvent.registrationLink && (
