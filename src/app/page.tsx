@@ -1,65 +1,140 @@
-import Image from "next/image";
+import React from 'react';
+import Link from 'next/link';
+import type { Metadata } from 'next';
+import { client, SanityEvent } from '@/sanity/client';
+import AboutSection from '@/components/sections/AboutSection';
+import EventsSection from '@/components/sections/EventsSection';
+import MembershipSection from '@/components/sections/MembershipSection';
+import { siteConfig } from '@/lib/site';
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: 'ISTE HIT SC | Technical Society at Haldia Institute of Technology',
+  description:
+    'Explore ISTE HIT SC events, workshops, and initiatives that empower students through practical technical learning and innovation.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'ISTE HIT SC | Technical Society at Haldia Institute of Technology',
+    description:
+      'Explore ISTE HIT SC events, workshops, and initiatives that empower students through practical technical learning and innovation.',
+    url: siteConfig.siteUrl,
+    images: [
+      {
+        url: '/Iste.png',
+        width: 512,
+        height: 512,
+        alt: 'ISTE HIT Student Chapter logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ISTE HIT SC | Technical Society at Haldia Institute of Technology',
+    description:
+      'Explore ISTE HIT SC events, workshops, and initiatives that empower students through practical technical learning and innovation.',
+    images: ['/Iste.png'],
+  },
+};
+
+export const revalidate = 60; // ISR revalidate every 60s
+
+export default async function Home() {
+  let upcomingEvent: SanityEvent | null = null;
+  
+  try {
+    // Attempt to fetch the very next upcoming event from sanity
+    const query = `*[_type == "event" && eventDate > now()] | order(eventDate asc)[0]`;
+    upcomingEvent = await client.fetch(query);
+  } catch (e) {
+    console.error("Sanity fetch failed. Ensure .env.local is configured properly.", e);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      {/* Hero Section */}
+      <header className="hero">
+          <div className="hero-content">
+              {upcomingEvent ? (
+                <>
+                  <span className="text-label" style={{ color: 'var(--theme-primary)', marginBottom: '1rem', display: 'block' }}>Upcoming Event</span>
+                    <h1 className="h-display hero-title" style={{ fontSize: 'clamp(2rem, 8.8vw, 3.5rem)', marginBottom: '1.5rem', lineHeight: 1 }}>
+                      {upcomingEvent.title}
+                  </h1>
+                  <p style={{ "fontSize": "1.125rem", "fontWeight": "500", "marginBottom": "2.5rem", "maxWidth": "28rem" }}>
+                      {upcomingEvent.description || "Join us for our next flagship event. Fostering technical growth through practical learning."}
+                      <br/><br/>
+                      <strong style={{ opacity: 0.8 }}><span className="material-symbols-outlined" style={{ fontSize: '1rem', verticalAlign: 'text-bottom' }}>event</span> {new Date(upcomingEvent.eventDate).toLocaleDateString()} | {upcomingEvent.location}</strong>
+                  </p>
+                  <div style={{ "display": "flex", "flexWrap": "wrap", "gap": "1rem" }}>
+                      {upcomingEvent.registration && upcomingEvent.registrationLink && (
+                        <a href={upcomingEvent.registrationLink} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ "padding": "1rem 2rem" }}>Register Now</a>
+                      )}
+                      <Link href="/events" className="btn btn-dark" style={{ "padding": "1rem 2rem" }}>All Events</Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                    <h1 className="h-display hero-title" style={{ fontSize: 'clamp(2.2rem, 10vw, 4.5rem)', lineHeight: '1.1' }}>
+                      Innovating,<br/>Educating,<br/>Empowering
+                  </h1>
+                  <p style={{ "fontSize": "1.125rem", "fontWeight": "500", "marginBottom": "2.5rem", "maxWidth": "28rem" }}>
+                      ISTE HIT SC — the technical society at Haldia Institute of Technology, not a club, fostering practical learning, continuous skill development, and a powerful community footprint.
+                  </p>
+                  <div style={{ "display": "flex", "flexWrap": "wrap", "gap": "1rem" }}>
+                      <Link href="/events" className="btn btn-dark" style={{ "padding": "1rem 2rem" }}>Explore Events</Link>
+                      <Link href="/about" className="btn btn-outline" style={{ "padding": "1rem 2rem" }}>Mission &amp; Vision</Link>
+                  </div>
+                </>
+              )}
+          </div>
+          {/* Hero Image */}
+          <div className="hero-image">
+              <div className="bg-img-cover" style={{ "backgroundImage": `url('${upcomingEvent?.imgUrl || '/hit-campus.jpeg'}')` }}></div>
+          </div>
+      </header>
+
+      {/* Marquee */}
+      <div className="marquee-wrapper">
+          <div className="marquee-content">
+              <span className="h-heading" style={{ "fontSize": "1.5rem" }}> INNOVATING - EDUCATING - EMPOWERING </span>
+              <span className="h-heading" style={{ "fontSize": "1.5rem" }}> INNOVATING - EDUCATING - EMPOWERING </span>
+              <span className="h-heading" style={{ "fontSize": "1.5rem" }}> INNOVATING - EDUCATING - EMPOWERING </span>
+              <span className="h-heading" style={{ "fontSize": "1.5rem" }}> INNOVATING - EDUCATING - EMPOWERING </span>
+              <span className="h-heading" style={{ "fontSize": "1.5rem" }}> INNOVATING - EDUCATING - EMPOWERING </span>
+          </div>
+      </div>
+
+      {/* Trust & Metrics */}
+      <section className="trust-metrics">
+          {/* Trusted By */}
+          <div className="trusted-logos">
+              <h3 className="text-label" style={{ "opacity": "0.6", "marginBottom": "1.5rem" }}>IN COLLABORATION WITH</h3>
+              <div className="logo-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+                  <div className="h-heading" style={{ fontSize: '1.25rem', opacity: 0.5 }}>Haldia Institute of Technology</div>
+                  <div className="h-heading" style={{ fontSize: '1.25rem', opacity: 0.5 }}>Indian Society for Technical Education</div>
+              </div>
+          </div>
+          {/* Stats */}
+          <div className="metrics-grid">
+              <div className="metric-item">
+                  <p className="text-label" style={{ "marginBottom": "0.5rem" }}>Active Members</p>
+                  <p className="metric-value">400+</p>
+              </div>
+              <div className="metric-item">
+                  <p className="text-label" style={{ "marginBottom": "0.5rem" }}>Events Conducted</p>
+                  <p className="metric-value">20+</p>
+              </div>
+              <div className="metric-item">
+                  <p className="text-label" style={{ "marginBottom": "0.5rem" }}>Alumni Network</p>
+                  <p className="metric-value">50+</p>
+              </div>
+          </div>
+      </section>
+
+      <AboutSection />
+      <EventsSection />
+      <MembershipSection />
+    </>
   );
 }
