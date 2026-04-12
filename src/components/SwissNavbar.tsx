@@ -34,6 +34,7 @@ export default function SwissNavbar() {
               <Link href="/events">Events</Link>
               <Link href="/about">About</Link>
               <Link href="/membership">Membership</Link>
+              <Link href="/team">Team</Link>
               <Link href="/faq">FAQ</Link>
               <div className="nav-divider"></div>
               <Link href="/membership" className="btn btn-primary" style={{padding: '0.5rem 1rem'}}>Join Now</Link>
@@ -46,6 +47,7 @@ export default function SwissNavbar() {
               <Link href="/events" onClick={closeMenu}>Events</Link>
               <Link href="/about" onClick={closeMenu}>About</Link>
               <Link href="/membership" onClick={closeMenu}>Membership</Link>
+              <Link href="/team" onClick={closeMenu}>Team</Link>
               <Link href="/faq" onClick={closeMenu}>FAQ</Link>
               <Link href="/membership" className="btn btn-primary nav-mobile-cta" onClick={closeMenu}>Join Now</Link>
           </div>
