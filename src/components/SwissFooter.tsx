@@ -12,7 +12,7 @@ export default function SwissFooter() {
   };
 
   return (
-    <footer className="footer">
+    <footer className="footer border-t-1">
         <div className="footer-grid">
             <div className="footer-col">
                 <div style={{display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.5rem"}}>
