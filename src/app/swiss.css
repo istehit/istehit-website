@@ -359,11 +359,6 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            filter: grayscale(100%);
-            transition: filter 0.5s ease;
-        }
-        .hero-image:hover .bg-img-cover {
-            filter: grayscale(0%);
         }
 
         /* Marquee */
