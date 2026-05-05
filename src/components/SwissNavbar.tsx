@@ -50,7 +50,7 @@ export default function SwissNavbar() {
               <Link href="/membership" onClick={closeMenu}>Membership</Link>
               <Link href="/team" onClick={closeMenu}>Team</Link>
               <Link href="/faq" onClick={closeMenu}>FAQ</Link>
-              <a href="https://ac.istehitsc.com/" target="_blank" rel="noopener noreferrer" className="btn btn-outline nav-mobile-cta" style={{ marginBottom: '1rem' }} onClick={closeMenu}>Latest Event</a>
+              <a href="https://ac.istehitsc.com/" target="_blank" rel="noopener noreferrer" className="btn btn-outline nav-mobile-cta" style={{ marginBottom: '1rem' }} onClick={closeMenu}>Annual Convention 3.0</a>
               <Link href="/membership" className="btn btn-primary nav-mobile-cta" onClick={closeMenu}>Join Now</Link>
           </div>
       </div>

@@ -242,7 +242,7 @@
         }
 
         .nav-mobile.is-open {
-            max-height: 24rem;
+            max-height: 27rem;
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
