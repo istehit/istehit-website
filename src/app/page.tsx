@@ -6,6 +6,7 @@ import AboutSection from '@/components/sections/AboutSection';
 import EventsSection from '@/components/sections/EventsSection';
 import MembershipSection from '@/components/sections/MembershipSection';
 import { siteConfig } from '@/lib/site';
+import EventPopup from '@/components/EventPopup';
 
 function formatHeroDate(dateValue: string) {
   return new Intl.DateTimeFormat('en-GB', {
@@ -60,6 +61,7 @@ export default async function Home() {
 
   return (
     <>
+      <EventPopup />
       {/* Hero Section */}
       <header className="hero">
           <div className="hero-content">
