@@ -7,6 +7,8 @@ interface Member {
   role: string;
   bio: string;
   linkedin: string;
+  image?: string;
+  isEC?: boolean;
 }
 
 interface TeamData {
@@ -169,7 +171,10 @@ export default function TeamPage() {
           {/* ── GRID ── */}
           {!loading && !error && (
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+              className={active === "ec"
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              }
               style={{ padding: "1.5rem" }}
             >
               {teamData[active].length === 0 ? (
@@ -179,12 +184,11 @@ export default function TeamPage() {
                 </p>
               ) : (
                 teamData[active].map((member, index) => (
-                  <MemberCard key={index} member={member} />
+                  <MemberCard key={`${active}-${member.name}-${index}`} member={member} />
                 ))
               )}
             </div>
           )}
-
         </div>
       </main>
     </>
@@ -192,22 +196,119 @@ export default function TeamPage() {
 }
 
 function mapMember(entry: Record<string, string>): Member {
+  const linkedin = entry["LinkedIn Account Link"]?.trim() || "https://www.linkedin.com/company/iste-hit-sc/";
+  const sheetImage = entry["Image"]?.trim();
+  const isEC = entry["Domain"]?.trim()?.toLowerCase() === "ec";
+
+  let image = "";
+  if (sheetImage && (sheetImage.includes("cloudinary.com") || sheetImage.startsWith("http"))) {
+    image = sheetImage;
+  }
+
+
   return {
     name: entry["Name"]?.trim() ?? "Unknown",
-    role: entry["Domain"]?.toLowerCase() === ("ec")
-      ? entry["POSTS"]?.trim()
-      : (entry["Domain"]?.trim()) ?? "",
+    role: isEC ? (entry["POSTS"]?.trim() ?? "Executive Council") : (entry["Domain"]?.trim() ?? ""),
     bio: entry["Few Key Words Describing Yourself"]?.trim() ?? "",
-    linkedin: entry["LinkedIn Account Link"]?.trim() || "https://www.linkedin.com/company/iste-hit-sc/",
+    linkedin: linkedin,
+    image: image,
+    isEC: isEC,
   };
 }
 
 function MemberCard({ member }: { member: Member }) {
   const [hovered, setHovered] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string | null>(member.image || null);
 
+  // Extract initials
+  const initials = member.name
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (member.isEC) {
+    return (
+      <div
+        className="group relative flex flex-col bg-white border-2 border-gray-500 hover:border-[#e84218e2] rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300 ease-out cursor-pointer overflow-hidden w-full"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* ── Image area ── */}
+        <div className="relative w-full aspect-4/5 bg-linear-to-br from-[#ffffff] to-[#e8eff7b2] overflow-hidden">
+          {/* ── Decorative dot grid (top-right) ── */}
+          <div className="absolute top-4 right-4 z-10 grid grid-cols-2 gap-[6px]">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="w-[5px] h-[5px] rounded-full bg-[#606163b5]" />
+            ))}
+          </div>
+
+          {/* ── blob behind portrait ── */}
+          <div
+            className="absolute bottom-[-5%] left-[-5%] w-[75%] h-[85%] rounded-tr-[60px]  bg-[#b7cafa57] transition-transform duration-500 group-hover:scale-105"
+          />
+
+          {/* ── Portrait image or initials ── */}
+          {imgSrc ? (
+            <img
+              src={imgSrc}
+              alt={member.name}
+              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.1]"
+              onError={() => setImgSrc(null)}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center select-none">
+              <span className="text-5xl font-black text-[#ff7300] tracking-widest">{initials}</span>
+            </div>
+          )}
+
+          {/* ── Floating LinkedIn icon ── */}
+          <a
+            href={member.linkedin}
+            className="absolute bottom-4 right-4 bg-white w-10 h-10 rounded-full flex items-center justify-center 
+              shadow-[0_2px_10px_rgba(0,0,0,0.12)] hover:scale-110 active:scale-95 transition-all z-20 text-[#1a1a1a] hover:text-[#e84118]"
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FaLinkedin className={`text-lg scale-[1.25]}`} />
+          </a>
+        </div>
+
+        {/* ── Info section ── */}
+        <div className="flex flex-col" style={{ padding: "1rem" }}>
+          <h3 className={`font-bold text-[1.2rem] leading-tight tracking-tight transition-colors duration-300 ${hovered ? "text-[#e84118]" : "text-[#1a1a1a]"}`}>
+            {member.name}
+          </h3>
+          <span className={`font-semibold  uppercase bold text-sm tracking-wide ${hovered ? "text-[#1a1a1a]" : "text-[#e84118]"}`} style={{ marginTop: "0.15rem" }}>
+            {member.role}
+          </span>
+        </div>
+
+        {/* ── BIO ── */}
+        {member.bio && (
+          <div
+            className="flex items-start gap-3 mx-3 mb-3"
+            style={{ padding: "0 1rem 1.2rem" }}
+          >
+            <p className="text-[#201f1f] text-sm leading-relaxed font-normal italic line-clamp-2">
+              <span className="text-[#e84118] font-black text-sm leading-none">&ldquo;</span>
+              {member.bio}
+              <span className="text-[#e84118] font-black text-sm leading-none">&rdquo;</span>
+            </p>
+
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Non-EC member template
   return (
     <div
-      className="relative overflow-hidden transition-all duration-300 bg-[#fafafa] cursor-pointer"
+      className="relative overflow-hidden transition-all duration-300 bg-[#fafafa] cursor-pointer flex flex-col justify-between h-full"
       style={{
         border: `2px solid ${hovered ? "#e84118" : "black"}`,
         padding: "1.5rem",
@@ -215,43 +316,61 @@ function MemberCard({ member }: { member: Member }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-
       {/* ── Diagonal flash layer ── */}
       <div className={`absolute top-[-60%] left-[-10%] w-[50%] h-[220%] bg-[rgba(232,65,24,0.12)]
         rotate-12 transition-transform duration-800 ease-in-out z-0 pointer-events-none
         ${hovered ? "translate-x-[280%]" : "-translate-x-full"}`}
       />
 
-      {/* ── LinkedIn icon ── */}
+      <div className="relative flex items-center gap-4 px-5 py-4 w-full max-w-md">
+        {/* Profile Image */}
+        <div className={`h-20 w-20 shrink-0 overflow-hidden rounded-full bg-[#e2e5e9] ${hovered ? "scale-[1.2]" : "scale-[1]"} transition-transform duration-500`}>
+          {imgSrc ? (
+            <img
+              src={imgSrc}
+              alt={member.name}
+              className={`h-full w-full object-cover `}
+              onError={() => setImgSrc(null)}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <span className="text-3xl font-black text-[#ff7300]">
+                {initials}
+              </span>
+            </div>
+          )}
+        </div>
 
-      <a href={member.linkedin}
-        className="absolute top-2 right-2 z-2"
-        style={{ paddingTop: "1rem", paddingRight: "0.75rem" }}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <FaLinkedin className="text-xl sm:text-2xl hover:text-[#e84118] transition-colors" />
-      </a>
+        {/* ── Content ── */}
+        <div style={{ position: "relative", zIndex: 1 }} className="flex flex-col h-full justify-between">
+          <div>
+            <h3
+              className={`font-black uppercase leading-tight transition-colors duration-300 text-xl ${hovered ? "text-[#e84118]" : "text-black"}`}
+              style={{ marginBottom: "0.25rem", paddingRight: "1.5rem" }}
+            >
+              {member.name}
+            </h3>
+            <span className={`font-bold uppercase text-sm tracking-wider transition-colors duration-300 ${hovered ? "text-black" : "text-[#e84118]"}`}>
+              {member.role}
+            </span>
+          </div>
+          <p
+            className="font-medium italic text-[rgba(0,0,0,0.8)] transition-colors duration-300 text-sm border-t-2 border-[rgba(0,0,0,0.1)] line-clamp-2"
+            style={{ paddingTop: "0.5rem", marginTop: "0.5rem" }}
+          >
+            {member.bio}
+          </p>
+        </div>
 
-      {/* ── Content ── */}
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <h3
-          className={`font-black uppercase leading-tight transition-colors duration-300 text-xl ${hovered ? "text-[#e84118]" : "text-black"}`}
-          style={{marginBottom: "0.25rem", paddingRight: "1.5rem"}}
+        {/* ── LinkedIn icon ── */}
+        <a href={member.linkedin}
+          className="absolute right-0 top-0 z-50"
+          target="_blank"
+          rel="noreferrer"
         >
-          {member.name}
-        </h3>
-        <span className="font-bold uppercase text-sm tracking-wider text-[#ec6543] transition-colors duration-300">
-          {member.role}
-        </span>
-        <p
-          className="font-medium italic text-[rgba(0,0,0,0.8)] transition-colors duration-300 text-sm border-t-2 border-[rgba(0,0,0,0.1)]"
-          style={{paddingTop: "0.5rem", marginTop: "0.5rem"}}
-        >
-          {member.bio}
-        </p>
+          <FaLinkedin className="text-xl sm:text-2xl hover:text-[#e84118] transition-colors" />
+        </a>
       </div>
-
     </div>
   );
 }
