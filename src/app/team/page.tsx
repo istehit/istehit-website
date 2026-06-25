@@ -14,36 +14,42 @@ interface Member {
 interface TeamData {
   ec: Member[];
   tech: Member[];
-  creative: Member[];
+  content: Member[];
+  graphic: Member[];
   pr: Member[];
-  media: Member[];
+  photo: Member[];
+  video: Member[];
   [key: string]: Member[];
 }
 
 const EMPTY_TEAM: TeamData = {
   ec: [],
   tech: [],
-  creative: [],
+  content: [],
+  graphic: [],
   pr: [],
-  media: [],
+  photo: [],
+  video: [],
 };
 
 const tabs = [
   { key: "ec", label: "Executive Council" },
-  { key: "tech", label: "Tech Team" },
-  { key: "creative", label: "Creative Team" },
-  { key: "media", label: "Media Team" },
-  { key: "pr", label: "PR Team" },
+  { key: "tech", label: "Technical Team" },
+  { key: "content", label: "Content Writers" },
+  { key: "graphic", label: "Graphic Designers" },
+  { key: "photo", label: "Photographers" },
+  { key: "video", label: "Video Editors" },
+  { key: "pr", label: "Public Relations" },
 ];
 
 const domainMap: Record<string, string> = {
   "EC": "ec",
   "Technical": "tech",
-  "Content Writer": "creative",
-  "Graphic Designers": "creative",
-  "Public Relations": "pr",
-  "Photographers": "media",
-  "Video Editors": "media",
+  "Content Writer": "content",
+  "Graphic Designer": "graphic",
+  "Public Relation": "pr",
+  "Photographer": "photo",
+  "Video Editor": "video",
 };
 
 export default function TeamPage() {
@@ -51,7 +57,9 @@ export default function TeamPage() {
   const [teamData, setTeamData] = useState<TeamData>(EMPTY_TEAM);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const activeTab = tabs.find((t) => t.key === active)!;
 
   useEffect(() => {
     async function fetchTeam() {
@@ -121,36 +129,107 @@ export default function TeamPage() {
       >
         <div className="min-h-screen flex flex-col w-full gap-6 max-w-6xl">
 
-          {/* ── TABS ── */}
-          <section className="bg-[rgba(244,244,240,0.9)]" style={{ paddingTop: "1rem" }}>
-            <div className="flex flex-wrap justify-center gap-2">
-              {tabs.map((tab) => {
-                const isActive = active === tab.key;
-                const isHovered = hoveredTab === tab.key;
+          {/* ── DROPDOWN SELECTOR ── */}
+          <section style={{ paddingTop: "1rem", paddingBottom: "0.5rem", position: "relative", zIndex: 60 }}>
+            <div className="flex justify-end">
+              <div className="relative" style={{ minWidth: "260px" }}>
 
-                return (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActive(tab.key)}
-                    onMouseEnter={() => setHoveredTab(tab.key)}
-                    onMouseLeave={() => setHoveredTab(null)}
-                    className="font-extrabold uppercase transition-all duration-300 text-sm sm:text-lg tracking-wider"
+                {/* Trigger button */}
+                <button
+                  id="team-dropdown-btn"
+                  onClick={() => setDropdownOpen((o) => !o)}
+                  className="w-full flex items-center justify-between border-2 border-black bg-black font-extrabold uppercase tracking-widest
+                   text-sm sm:text-base text-white hover:text-orange-500 transition-colors duration-200 cursor-pointer"
+                  style={{
+                    padding: "0.65rem 1rem",
+                  }}
+                >
+                  <span>{activeTab.label}</span>
+                  {/* Chevron */}
+                  <svg
                     style={{
-                      border: `2px solid ${isActive ? "black" : isHovered ? "#e84118" : "black"}`,
-                      paddingTop: "0.5rem",
-                      paddingBottom: "0.5rem",
-                      paddingLeft: "0.75rem",
-                      paddingRight: "0.75rem",
-                      backgroundColor: isActive ? "#000" : "#fff",
-                      color: isActive ? "#fff" : isHovered ? "#e84118" : "#000",
+                      width: "18px",
+                      height: "18px",
+                      marginLeft: "0.75rem",
+                      flexShrink: 0,
+                      transition: "transform 0.25s",
+                      transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {/* Dropdown list */}
+                {dropdownOpen && (
+                  <ul
+                    className="absolute left-0 w-full z-50"
+                    style={{
+                      top: "calc(100% + 2px)",
+                      border: "2px solid #000",
+                      backgroundColor: "#fff",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      boxShadow: "4px 4px 0px #000",
                     }}
                   >
-                    {tab.label}
-                  </button>
-                );
-              })}
+                    {tabs.map((tab) => (
+                      <li key={tab.key}>
+                        <button
+                          onClick={() => { setActive(tab.key); setDropdownOpen(false); }}
+                          className="w-full text-left font-bold uppercase tracking-wider text-sm transition-all duration-150"
+                          style={{
+                            padding: "0.6rem 1rem",
+                            backgroundColor: active === tab.key ? "#e84118" : "transparent",
+                            color: active === tab.key ? "#fff" : "#000",
+                            borderBottom: "1px solid rgba(0,0,0,0.08)",
+                            cursor: "pointer",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (active !== tab.key) {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = "#f5f5f5";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (active !== tab.key) {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                            }
+                          }}
+                        >
+                          {tab.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
+
+            {/* Close dropdown when clicking outside */}
+            {dropdownOpen && (
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setDropdownOpen(false)}
+              />
+            )}
           </section>
+
+          {/* ── SECTION HEADING ── */}
+          {!loading && !error && (
+            <div
+              className="flex items-center gap-4"
+              style={{ paddingLeft: "1.5rem", paddingRight: "1.5rem", marginTop: "0.5rem" }}
+            >
+              <div style={{ width: "4px", height: "2.5rem", backgroundColor: "#e84118", flexShrink: 0 }} />
+              <div>
+                <h2 className="font-black uppercase leading-none tracking-wider text-2xl sm:text-4xl text-black">
+                  {activeTab.label}
+                </h2>
+              </div>
+            </div>
+          )}
 
           {/* ── LOADING ── */}
           {loading && (
@@ -293,7 +372,7 @@ function MemberCard({ member }: { member: Member }) {
             className="flex items-start gap-3 mx-3 mb-3"
             style={{ padding: "0 1rem 1.2rem" }}
           >
-            <p className="text-[#201f1f] text-sm leading-relaxed font-normal italic line-clamp-2">
+            <p className="text-[#201f1f] text-sm tracking-wide font-normal line-clamp-2">
               <span className="text-[#e84118] font-black text-sm leading-none">&ldquo;</span>
               {member.bio}
               <span className="text-[#e84118] font-black text-sm leading-none">&rdquo;</span>
@@ -355,7 +434,7 @@ function MemberCard({ member }: { member: Member }) {
             </span>
           </div>
           <p
-            className="font-medium italic text-[rgba(0,0,0,0.8)] transition-colors duration-300 text-sm border-t-2 border-[rgba(0,0,0,0.1)] line-clamp-2"
+            className="font-medium italic text-[rgba(0,0,0,0.8)] transition-colors duration-300 text-sm border-t-2 border-[rgba(0,0,0,0.1)] line-clamp-3 md:line-clamp-2"
             style={{ paddingTop: "0.5rem", marginTop: "0.5rem" }}
           >
             {member.bio}
