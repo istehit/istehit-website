@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DrivePhoto } from '@/lib/drive';
 
 export function EventCarousel({
@@ -12,6 +12,13 @@ export function EventCarousel({
   height?: number;
 }) {
   const [current, setCurrent] = useState(0);
+  const [loadedMap, setLoadedMap] = useState<Record<string, boolean>>({});
+
+  // Reset loaded state whenever the photos array changes (new folder)
+  useEffect(() => {
+    setCurrent(0);
+    setLoadedMap({});
+  }, [photos]);
 
   if (photos.length === 0) {
     return (
@@ -69,15 +76,32 @@ export function EventCarousel({
             }}
             aria-hidden={index !== current}
           >
+            {/* Skeleton shown until image loads */}
+            {!loadedMap[item.thumbnailUrl] && (
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.4s infinite',
+                }}
+              />
+            )}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={item.thumbnailUrl}
               alt={`${eventName} photo ${index + 1}`}
+              onLoad={() =>
+                setLoadedMap((prev) => ({ ...prev, [item.thumbnailUrl]: true }))
+              }
               style={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
                 display: 'block',
+                opacity: loadedMap[item.thumbnailUrl] ? 1 : 0,
+                transition: 'opacity 0.3s ease',
               }}
             />
           </div>
