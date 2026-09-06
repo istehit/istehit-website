@@ -98,7 +98,7 @@ export default async function Home() {
           </div>
           {/* Hero Image */}
           <div className="hero-image">
-              <div className="bg-img-cover" style={{ "backgroundImage": `url('${upcomingEvent?.imgUrl || '/hit-campus.jpeg'}')` }}></div>
+              <div className="bg-img-cover" style={{ "backgroundImage": `url('${upcomingEvent?.imgUrl || '/ISTE_HIT.webp'}')` }}></div>
           </div>
       </header>
 
