@@ -26,7 +26,7 @@ export default function ImageSlider({ photos }: { photos: DrivePhoto[] }) {
         backgroundColor: 'var(--theme-dark)',
       }}>
         <img
-          src="/Iste.png"
+          src="/ISTE_HIT.webp"
           alt="ISTE"
           style={{
             width: '80px',

@@ -5,7 +5,7 @@ export default function Footer() {
         <div>
           <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-sm overflow-hidden shrink-0">
-              <img src="/iste.png" alt="ISTE Logo" className="w-full h-full object-contain" />
+              <img src="/ISTE_HIT.webp" alt="ISTE Logo" className="w-full h-full object-contain" />
             </div>
             <h4 className="text-xl font-bricolage text-white font-medium tracking-tight">
               ISTE-HIT SC

@@ -14,8 +14,8 @@ export default function EventsCarousel({ events }: { events: DriveEvent[] }) {
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % events.length);
         setIsAnimating(false);
-      }, 300);
-    }, 4000);
+      }, 1000);
+    }, 8000);
     return () => clearInterval(interval);
   }, [events.length]);
 
@@ -25,7 +25,7 @@ export default function EventsCarousel({ events }: { events: DriveEvent[] }) {
     setTimeout(() => {
       setCurrentIndex(index);
       setIsAnimating(false);
-    }, 300);
+    }, 1000);
   };
 
   const goPrev = () => {
@@ -59,7 +59,7 @@ export default function EventsCarousel({ events }: { events: DriveEvent[] }) {
         height: '550px',
         opacity: isAnimating ? 0 : 1,
         transform: isAnimating ? 'translateX(20px)' : 'translateX(0)',
-        transition: 'opacity 0.3s ease, transform 0.3s ease',
+        transition: 'opacity 1s ease, transform 1s ease',
         position: 'relative',
       }}>
         {/* Left Arrow */}
@@ -118,7 +118,7 @@ export default function EventsCarousel({ events }: { events: DriveEvent[] }) {
               backgroundColor: 'var(--theme-dark)',
             }}>
               <img
-                src="/Iste.png"
+                src="/ISTE_HIT.webp"
                 alt="ISTE"
                 style={{ width: '50px', height: '50px', objectFit: 'contain', opacity: 0.7 }}
               />

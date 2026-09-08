@@ -100,7 +100,7 @@ function EventRow({ event, index, onViewPhotos }: { event: DriveEvent; index: nu
             }}
           >
             <img
-              src="/Iste.png"
+              src="/ISTE_HIT.webp"
               alt="ISTE"
               style={{ width: '80px', height: '80px', objectFit: 'contain', opacity: 0.7 }}
             />

@@ -14,7 +14,7 @@ export default function SwissNavbar() {
           <div className="nav-brand">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <Link href="/" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none' }}>
-                  <img src="/Iste.png" alt="ISTE Logo" style={{width: '2rem', height: '2rem', objectFit: 'contain'}} />
+                  <img src="/ISTE_HIT.webp" alt="ISTE Logo" style={{width: '2rem', height: '2rem', objectFit: 'contain'}} />
                   <h1 className="h-heading" style={{fontSize: "1.25rem", color: 'var(--theme-dark)'}}>ISTE-HIT SC</h1>
               </Link>
           </div>

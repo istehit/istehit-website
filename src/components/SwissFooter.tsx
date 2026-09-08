@@ -12,12 +12,12 @@ export default function SwissFooter() {
   };
 
   return (
-    <footer className="footer border-t-1">
+    <footer className="footer border-t">
         <div className="footer-grid">
             <div className="footer-col">
                 <div style={{display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.5rem"}}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/Iste.png" alt="ISTE Logo" style={{width: '1.2rem', height: '1.2rem', objectFit: 'contain'}} />
+                    <img src="/ISTE_HIT.webp" alt="ISTE Logo" style={{width: '1.2rem', height: '1.2rem', objectFit: 'contain'}} />
                     <span className="text-label">ISTE-HIT SC</span>
                 </div>
                 <div style={{fontSize: "0.875rem", opacity: 0.6}}>
@@ -42,6 +42,7 @@ export default function SwissFooter() {
                     <li><a href="https://www.instagram.com/iste.hit.sc/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
                     <li><a href="https://www.linkedin.com/company/iste-hit-sc/posts/?feedView=all" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                     <li><a href="https://github.com/istehit" target="_blank" rel="noopener noreferrer">Github</a></li>
+                    <li><a href="https://www.youtube.com/@ISTEHITSC" target="_blank" rel="noopener noreferrer">Youtube</a></li>
                 </ul>
             </div>
             <div className="footer-col">

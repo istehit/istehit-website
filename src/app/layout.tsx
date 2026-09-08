@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/Iste.png",
+        url: "/ISTE_HIT.webp",
         width: 512,
         height: 512,
         alt: "ISTE HIT Student Chapter logo",
@@ -42,12 +42,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ISTE HIT SC | Technical Society at HIT",
     description: siteConfig.description,
-    images: ["/Iste.png"],
+    images: ["/ISTE_HIT.webp"],
   },
   icons: {
-    icon: [{ url: "/Iste.png", type: "image/png" }],
-    shortcut: ["/Iste.png"],
-    apple: [{ url: "/Iste.png", type: "image/png" }],
+    icon: [{ url: "/ISTE_HIT.webp", type: "image/png" }],
+    shortcut: ["/ISTE_HIT.webp"],
+    apple: [{ url: "/ISTE_HIT.webp", type: "image/png" }],
   },
   robots: {
     index: true,
@@ -68,7 +68,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: siteConfig.name,
   url: siteConfig.siteUrl,
-  logo: `${siteConfig.siteUrl}/Iste.png`,
+  logo: `${siteConfig.siteUrl}/ISTE_HIT.webp`,
   description: siteConfig.description,
   sameAs: [],
 };

@@ -15,7 +15,7 @@ export default function Navbar() {
           {/* Logo Area */}
           <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 min-w-0">
             <Link href="/" onClick={closeMenu} className="w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-sm overflow-hidden shrink-0">
-              <img src="/iste.png" alt="ISTE Logo" className="w-full h-full object-contain" />
+              <img src="/ISTE_HIT.webp" alt="ISTE Logo" className="w-full h-full object-contain" />
             </Link>
             <span className="font-bricolage text-sm sm:text-lg tracking-tight font-medium truncate">
               ISTE-HIT SC

@@ -41,8 +41,8 @@ export async function fetchEventFolders(): Promise<DriveEvent[]> {
   // List subfolders (events)
   const foldersRes = await drive.files.list({
     q: `'${ROOT_FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
-    fields: 'files(id, name)',
-    orderBy: 'name desc',
+    fields: 'files(id, name, createdTime)',
+    orderBy: 'createdTime desc',
     pageSize: 20,
   });
 

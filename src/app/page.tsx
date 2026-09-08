@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     url: siteConfig.siteUrl,
     images: [
       {
-        url: '/Iste.png',
+        url: '/ISTE_HIT.webp',
         width: 512,
         height: 512,
         alt: 'ISTE HIT Student Chapter logo',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: 'ISTE HIT SC | Technical Society at Haldia Institute of Technology',
     description:
       'Explore ISTE HIT SC events, workshops, and initiatives that empower students through practical technical learning and innovation.',
-    images: ['/Iste.png'],
+    images: ['/ISTE_HIT.webp'],
   },
 };
 

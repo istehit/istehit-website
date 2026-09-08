@@ -10,14 +10,14 @@ export default function HeroSection() {
           className="w-full h-full object-cover opacity-40"
           alt="Haldia Institute of Technology Campus"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-neutral-950/60" />
+        <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-neutral-950/80 to-neutral-950/60" />
       </div>
 
       {/* Logo */}
       <div className="absolute top-6 left-6 md:top-8 md:left-12 z-20">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/Iste.png"
+          src="/ISTE_HIT.webp"
           alt="ISTE HIT SC Technical Society"
           className="w-12 h-12 rounded-xl object-contain bg-white/10 backdrop-blur-md border border-white/20"
         />
@@ -50,7 +50,7 @@ export default function HeroSection() {
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <span className="text-xs uppercase tracking-widest text-white/40">Scroll</span>
-        <div className="w-[1px] h-10 bg-gradient-to-b from-white/40 to-transparent" />
+        <div className="w-px h-10 bg-linear-to-b from-white/40 to-transparent" />
       </div>
     </header>
   );
